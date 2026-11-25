@@ -1,0 +1,358 @@
+/* ============================================================================
+ * 运营总控 · 动态数据大屏 —— 令牌与作用域样式
+ * ----------------------------------------------------------------------------
+ * 设计稿：deliverables/ops-deck-redesign/DESIGN.md
+ *
+ * 为什么单独一个命名空间（--gd-*）：
+ * 全站是冷蓝 --sc-*（#006494），而运营总控要与「菜品沽清」页的暖中性 + 深绿对齐。
+ * 两套色板不能混，所以在根节点注入 --gd-*，只影响本页，不污染全局。
+ * ========================================================================== */
+
+.ops-deck-scope {
+  --gd-ink-strong: #37352f;
+  --gd-ink-body: #5a5854;
+  /* 标签色：原 #787774 在 #fbfbfa 上仅 4.32，低于 AA 4.5，改深一档（实测 5.78–5.98） */
+  --gd-ink-muted: #66635e;
+  /* 外框改用沽清母版 #d3d1cb；原 #e6e6e4 降级为分区线，行线仍用 line-soft */
+  --gd-line-main: #d3d1cb;
+  --gd-line-section: #e6e6e4;
+  --gd-line-soft: #efefed;
+  --gd-surface: #fbfbfa;
+  --gd-brand: #2b593f;
+  --gd-brand-soft: #edf3ec;
+  --gd-brand-line: #c4dcbc;
+  --gd-danger: #d44333;
+  --gd-info: #1c5598;
+  /* 预警色：原 #c26d00 在 #fdf6e3 上仅 3.55，改深（实测 5.46） */
+  --gd-amber: #965400;
+  --gd-amber-soft: #fdf6e3;
+  --gd-radius-card: 4px;
+  --gd-radius-chip: 2px;
+
+  color: var(--gd-ink-strong);
+  /* 画布比卡片深半阶：卡片靠 1px 描边 + 底色差浮起来，不用阴影 */
+  background: #f6f6f4;
+}
+
+/* ---------- 指挥条 ---------- */
+.ops-bar {
+  height: 52px;
+  border-bottom: 1px solid var(--gd-line-section);
+  background: var(--gd-surface);
+}
+
+/* ---------- 焦点：键盘可达 ----------
+ * 之前全页 0 个 focus 样式，Tab 走一圈看不见落点。
+ * 统一 1px 墨色描边 + 1px 外扩，不用蓝色 ring（与母版一致）。 */
+.ops-deck-scope :focus-visible {
+  outline: 1px solid var(--gd-brand);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+/* 深色底上的焦点用白描边 */
+.ops-deck-scope .ops-hud :focus-visible {
+  outline-color: #fff;
+}
+
+/* ---------- 滚动条：与全站一致 ---------- */
+.ops-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ops-scroll::-webkit-scrollbar-thumb {
+  background: #dcdad5;
+  border-radius: 0;
+}
+
+.ops-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--gd-line-main);
+}
+
+.ops-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #dcdad5 transparent;
+}
+
+/* ---------- 卡片 ---------- */
+.ops-card {
+  border: 1px solid var(--gd-line-main);
+  background: #ffffff;
+  border-radius: var(--gd-radius-card);
+  /* 卡片底部一条 1px 内阴影替代投影，让卡片在灰底上有"压住"的实感 */
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+}
+
+/* 卡片标题栏：比正文区浅一阶，形成纵向分区，避免整块白 */
+.ops-card-head {
+  background: #fcfcfb;
+  border-bottom: 1px solid var(--gd-line-section);
+}
+
+/* 主指标卡：左侧 2px 品牌竖条，与次级卡片区分主次 */
+.ops-kpi::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--gd-brand);
+  opacity: 0.55;
+}
+
+.ops-kpi-warn::before {
+  background: var(--gd-danger);
+  opacity: 0.7;
+}
+
+.ops-card-title {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gd-ink-muted);
+  font-weight: 500;
+}
+
+/* ---------- 巨指标 ---------- */
+.ops-kpi-value {
+  /* 1280 以下内容区只有 ~1000px，4 列时单卡不足 260px，40px 会溢出 */
+  font-size: clamp(28px, 2.3vw, 40px);
+  line-height: 1.05;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--gd-ink-strong);
+}
+
+.ops-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 数字滚动 ----------
+ * 结构：每个字符一列，列内「旧值在上、新值在下」，变化时整列上移一屏。
+ * 关键约束：列宽固定为 1ch，容器宽度不随位数变化，避免横向抖动。 */
+.rn-col {
+  display: inline-block;
+  position: relative;
+  width: 1ch;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.rn-stack {
+  display: block;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.rn-stack.rn-anim {
+  transform: translateY(-1em);
+}
+
+.rn-cell {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+  text-align: center;
+}
+
+/* 非数字字符（¥ , . : 空格）不做滚动，保持静止 */
+.rn-static {
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+}
+
+/* ---------- 异常脉冲 ----------
+ * 红线：动效只作用于描边与圆点，绝不作用于文字（文字闪烁不可读） */
+@keyframes ops-pulse-danger {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(212, 67, 51, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(212, 67, 51, 0.55);
+  }
+}
+
+.ops-anomaly-danger {
+  border-color: rgba(212, 67, 51, 0.45);
+  animation: ops-pulse-danger 2s ease-in-out infinite;
+}
+
+.ops-anomaly-danger::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--gd-danger);
+}
+
+@keyframes ops-dot-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ops-dot-danger {
+  animation: ops-dot-breathe 2s ease-in-out infinite;
+}
+
+/* ---------- 严重度标记：形状 + 颜色双编码（色弱可辨） ---------- */
+.ops-sev {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  display: inline-block;
+}
+
+.ops-sev--danger {
+  border-radius: 50%;
+  background: var(--gd-danger);
+}
+
+.ops-sev--warn {
+  /* 三角：用 clip-path 画，避免额外图标资源 */
+  background: var(--gd-amber);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  border-radius: 0;
+}
+
+.ops-sev--info {
+  border-radius: 50%;
+  border: 1.5px solid var(--gd-ink-muted);
+  background: transparent;
+}
+
+/* ---------- 热区格子 ---------- */
+.ops-heat-cell {
+  border-radius: 2px;
+  border: 1px solid var(--gd-line-soft);
+  transition: background-color 200ms linear;
+}
+
+/* 图表空态底纹：极淡的 5 分钟网格，让空白区仍然读作「坐标系」而不是白块 */
+.ops-chart-grid {
+  background-image: repeating-linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.028) 0,
+      rgba(0, 0, 0, 0.028) 1px,
+      transparent 1px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.028) 0,
+      rgba(0, 0, 0, 0.028) 1px,
+      transparent 1px,
+      transparent 40px
+    );
+}
+
+/* ---------- 空态 ---------- */
+.ops-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: 12px;
+}
+
+.ops-empty-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--gd-line-main);
+  color: var(--gd-ink-muted);
+}
+
+.ops-empty-title {
+  font-size: 11px;
+  color: var(--gd-ink-body);
+  font-weight: 500;
+}
+
+.ops-empty-desc {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--gd-ink-muted);
+  max-width: 240px;
+}
+
+/* ---------- 图例 ---------- */
+.ops-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+  color: var(--gd-ink-muted);
+}
+
+.ops-legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  border: 1px solid var(--gd-line-main);
+  display: inline-block;
+}
+
+/* ---------- 营业时段进度 ---------- */
+.ops-period-track {
+  position: relative;
+  height: 4px;
+  background: var(--gd-line-soft);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ops-period-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, var(--gd-brand-line), var(--gd-brand));
+  border-radius: 2px;
+}
+
+/* ---------- 骨架 ---------- */
+@keyframes ops-skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.ops-skeleton {
+  background-image: linear-gradient(90deg, #efefed 0%, #f7f7f5 50%, #efefed 100%);
+  background-size: 200% 100%;
+  animation: ops-skeleton 1.4s ease-in-out infinite;
+}
+
+/* ---------- 降级：尊重系统「减少动态效果」 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ops-deck-scope *,
+  .ops-deck-scope *::before,
+  .ops-deck-scope *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

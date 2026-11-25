@@ -1,0 +1,12 @@
+file,lines,kb
+opsDeck/OpsDeckPrimitives.tsx,125,4.0
+opsDeck/OpsDeckV2.tsx,1668,78.1
+opsDeck/RevenueChart.tsx,261,9.3
+opsDeck/opsDeckTheme.css,358,8.2
+opsDeck/useOpsDeckData.ts,683,23.3
+opsDeck/useOpsLocalData.ts,273,10.3
+showcase/screenshots/anomaly-band.jpg,-,55
+showcase/screenshots/deck-1600-bottom.jpg,-,157
+showcase/screenshots/deck-1600.jpg,-,192
+showcase/skin-gallery.html,344,21.1
+tokens/tokens.css,61,3.1

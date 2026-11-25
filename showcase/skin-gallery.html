@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>运营总控 · 视觉皮肤样品间</title>
+<!--
+  零依赖样品间：只用 opsDeck/opsDeckTheme.css 里的 .ops-* 类与 tokens。
+  布局用下方 .g-* 内联样式补齐（样品间自身需要栅格），不参与皮肤定义。
+  真实大屏的像素快照见 screenshots/，本页用于看「皮肤词汇表」。
+-->
+<link rel="stylesheet" href="../opsDeck/opsDeckTheme.css">
+<style>
+  html, body { margin: 0; }
+  body {
+    background: #f6f6f4;
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    color: #37352f;
+    padding: 28px 32px 64px;
+  }
+  .g-wrap { max-width: 1180px; margin: 0 auto; }
+  .g-h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .g-sub { font-size: 12px; color: #66635e; margin: 0 0 28px; line-height: 1.6; }
+  .g-sec { margin: 0 0 30px; }
+  .g-sec > h2 {
+    font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+    color: #66635e; font-weight: 500; margin: 0 0 10px;
+    padding-bottom: 6px; border-bottom: 1px solid #e6e6e4;
+  }
+  .g-note { font-size: 11px; color: #66635e; line-height: 1.6; margin: 8px 0 0; }
+  .g-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
+  .g-grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .g-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .g-col { display: flex; flex-direction: column; }
+  .g-pad { padding: 10px 12px; }
+  .g-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 8px; }
+  .g-sws { margin-bottom: 12px; }
+  .g-sws > b { display: block; font-size: 9px; font-weight: 500; color: #66635e; letter-spacing: .04em; margin-bottom: 5px; }
+  .g-sw { border: 1px solid #d3d1cb; border-radius: 4px; overflow: hidden; background: #fff; }
+  .g-sw i { display: block; height: 38px; }
+  .g-sw div { padding: 5px 7px; font-size: 9.5px; line-height: 1.5; color: #5a5854; }
+  .g-sw b { display: block; font-weight: 600; color: #37352f; font-size: 10px; }
+  .g-sw code { font-size: 9px; color: #66635e; }
+  /* 样品间专用：卡片内容栅格 */
+  .g-kpi-inner { position: relative; padding: 10px 12px 11px; }
+  .g-badge { font-size: 9px; padding: 1px 4px; border-radius: 2px; }
+  .g-badge--up { background: #edf3ec; color: #2b593f; }
+  .g-badge--down { background: rgba(186,26,26,.07); color: #d44333; }
+  .g-heat { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+  .g-heat > * { height: 34px; display: grid; place-items: center; }
+  .g-btns { display: flex; align-items: center; gap: 4px; }
+  .g-btn {
+    font-size: 9px; padding: 2px 4px; line-height: 1.2;
+    border: 1px solid #d3d1cb; border-radius: 2px; background: #fff;
+    color: #66635e; white-space: nowrap; cursor: pointer;
+  }
+  .g-btn:hover { color: #37352f; }
+  .g-sel {
+    font-size: 9px; height: 16px; padding: 0 2px; border: 1px solid #d3d1cb;
+    border-radius: 2px; background: #fff; color: #66635e; cursor: pointer;
+  }
+  .g-anom-title { font-size: 11px; font-weight: 600; color: #37352f; }
+  .g-anom-detail { font-size: 10.5px; color: #66635e; }
+  .g-anom-card { position: relative; padding: 8px 8px 8px 14px; }
+  .g-anom-row1 { display: flex; align-items: center; gap: 6px; }
+  .g-anom-row1 .g-count { font-size: 11px; font-weight: 600; }
+  .g-anom-row2 { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+  .g-anom-row2 .g-detail { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .g-empty-box { height: 132px; }
+  .g-code { font-family: ui-monospace, Consolas, monospace; font-size: 10.5px; color: #5a5854; }
+  .g-track { height: 4px; }
+  .g-flexcol { display: flex; flex-direction: column; gap: 2px; }
+</style>
+</head>
+<body>
+<div class="g-wrap ops-deck-scope" style="background:transparent">
+
+  <h1 class="g-h1">运营总控 · 视觉皮肤样品间</h1>
+  <p class="g-sub">
+    只引 <span class="g-code">opsDeck/opsDeckTheme.css</span>，不引 Tailwind、不引 React、不跑构建。<br>
+    每个色块、线条、动效都来自真实大屏源码；栅格由本页自带的 <span class="g-code">.g-*</span> 样式补齐，不属于皮肤。
+  </p>
+
+  <!-- ================= 令牌 ================= -->
+  <section class="g-sec">
+    <h2>一 · 令牌 --gd-*</h2>
+    <div class="g-sws">
+      <b>文字</b>
+      <div class="g-swatches">
+        <div class="g-sw"><i style="background:#37352f"></i><div><b>ink-strong</b><code>#37352f</code><br>标题 / 巨指标</div></div>
+        <div class="g-sw"><i style="background:#5a5854"></i><div><b>ink-body</b><code>#5a5854</code><br>正文</div></div>
+        <div class="g-sw"><i style="background:#66635e"></i><div><b>ink-muted</b><code>#66635e</code><br>标签（AA 5.78）</div></div>
+      </div>
+    </div>
+    <div class="g-sws">
+      <b>描边（三档）</b>
+      <div class="g-swatches">
+        <div class="g-sw"><i style="background:#d3d1cb"></i><div><b>line-main</b><code>#d3d1cb</code><br>卡片外框</div></div>
+        <div class="g-sw"><i style="background:#e6e6e4"></i><div><b>line-section</b><code>#e6e6e4</code><br>区块分隔</div></div>
+        <div class="g-sw"><i style="background:#efefed"></i><div><b>line-soft</b><code>#efefed</code><br>行分隔</div></div>
+      </div>
+    </div>
+    <div class="g-sws">
+      <b>面</b>
+      <div class="g-swatches">
+        <div class="g-sw"><i style="background:#fbfbfa"></i><div><b>surface</b><code>#fbfbfa</code><br>标题栏 / 指挥条</div></div>
+        <div class="g-sw"><i style="background:#f6f6f4"></i><div><b>canvas</b><code>#f6f6f4</code><br>画布底（比卡片深半阶）</div></div>
+      </div>
+    </div>
+    <div class="g-sws">
+      <b>主色 · 深绿</b>
+      <div class="g-swatches">
+        <div class="g-sw"><i style="background:#2b593f"></i><div><b>brand</b><code>#2b593f</code><br>主色 / 达成</div></div>
+        <div class="g-sw"><i style="background:#edf3ec"></i><div><b>brand-soft</b><code>#edf3ec</code><br>主色淡底</div></div>
+        <div class="g-sw"><i style="background:#c4dcbc"></i><div><b>brand-line</b><code>#c4dcbc</code><br>主色描边</div></div>
+      </div>
+    </div>
+    <div class="g-sws">
+      <b>语义色</b>
+      <div class="g-swatches">
+        <div class="g-sw"><i style="background:#d44333"></i><div><b>danger</b><code>#d44333</code><br>严重 / 下滑</div></div>
+        <div class="g-sw"><i style="background:#1c5598"></i><div><b>info</b><code>#1c5598</code><br>信息 / 指派</div></div>
+        <div class="g-sw"><i style="background:#965400"></i><div><b>amber</b><code>#965400</code><br>预警（AA 5.46）</div></div>
+        <div class="g-sw"><i style="background:#fdf6e3"></i><div><b>amber-soft</b><code>#fdf6e3</code><br>预警淡底</div></div>
+      </div>
+    </div>
+    <p class="g-note">
+      圆角：卡片 <span class="g-code">4px</span>、芯片 <span class="g-code">2px</span> —— 刻意做小，是「墨线表格」气质。<br>
+      涨跌口径：<b>涨用绿、跌用红</b>（经营指标口径，不是证券的红涨绿跌）。
+    </p>
+  </section>
+
+  <!-- ================= 卡片与标题 ================= -->
+  <section class="g-sec">
+    <h2>二 · 卡片 .ops-card / 标题栏 .ops-card-head</h2>
+    <div class="g-grid2">
+      <div class="ops-card g-col">
+        <div class="ops-card-head" style="padding:7px 12px; display:flex; align-items:center; justify-content:space-between">
+          <span class="ops-card-title">营收曲线 · 5 分钟</span>
+          <span class="ops-num" style="font-size:9.5px;color:var(--gd-ink-muted)">近 8 小时 · 累计 ¥3,540</span>
+        </div>
+        <div class="ops-chart-grid g-flexcol" style="height:120px"></div>
+      </div>
+      <div class="ops-card g-col">
+        <div class="ops-card-head" style="padding:7px 12px">
+          <span class="ops-card-title">空态（图表无数据时）</span>
+        </div>
+        <div class="ops-empty">
+          <span class="ops-empty-icon" aria-hidden="true">—</span>
+          <span class="ops-empty-title">今日暂无支付记录</span>
+          <span class="ops-empty-desc">完成第一笔收款后会展示渠道占比</span>
+        </div>
+      </div>
+    </div>
+    <p class="g-note">卡片靠 <b>1px 描边 + 底色差 + 底部 1px 内阴影</b> 浮起来，不用投影。标题栏比正文浅一阶，形成纵向分区。</p>
+  </section>
+
+  <!-- ================= 巨指标 ================= -->
+  <section class="g-sec">
+    <h2>三 · 巨指标 .ops-kpi / .ops-kpi-value / .ops-num</h2>
+    <div class="g-grid4">
+      <div class="ops-card ops-kpi g-kpi-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="ops-card-title">今日营收</span>
+          <span class="g-badge g-badge--up">▲ 74.6%</span>
+        </div>
+        <div class="ops-kpi-value ops-num" style="margin-top:2px">¥3,540</div>
+        <div class="ops-num" style="font-size:9.5px;color:var(--gd-ink-muted)">目标 ¥6,000 · 还差 ¥2,460</div>
+      </div>
+      <div class="ops-card ops-kpi g-kpi-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="ops-card-title">在制订单</span>
+          <span class="g-badge g-badge--up">5 单在手</span>
+        </div>
+        <div class="ops-kpi-value ops-num" style="margin-top:2px">5</div>
+        <div style="display:flex;align-items:flex-end;height:22px">
+          <svg width="150" height="22" viewBox="0 0 150 22" aria-hidden="true">
+            <path d="M0,17 L18,15 L36,16 L54,9 L72,11 L90,6 L108,8 L126,3 L144,5" fill="none" stroke="var(--gd-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="144" cy="5" r="2" fill="var(--gd-brand)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ops-card ops-kpi ops-kpi-warn g-kpi-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="ops-card-title">平均出餐</span>
+          <span class="g-badge g-badge--up">正常</span>
+        </div>
+        <div class="ops-kpi-value ops-num" style="margin-top:2px">00:01</div>
+        <div class="ops-num" style="font-size:9.5px;color:var(--gd-ink-muted)">P50 00:01 · P90 00:01</div>
+      </div>
+      <div class="ops-card ops-kpi g-kpi-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="ops-card-title">上座率</span>
+          <span class="g-badge g-badge--down">空间偏多</span>
+        </div>
+        <div class="ops-kpi-value ops-num" style="margin-top:2px">38<span style="font-size:.55em">%</span></div>
+        <div class="ops-num" style="font-size:9.5px;color:var(--gd-ink-muted)">5 点位在席 / 共 13 点</div>
+      </div>
+    </div>
+    <p class="g-note">
+      巨指标字号 <span class="g-code">clamp(28px, 2.3vw, 40px)</span>，<b>1280 以下内容区只有 ~1000px，4 列时单卡不足 260px，固定 40px 会溢出</b>。<br>
+      左侧 2px 竖条区分主次：常规 <span class="g-code">.ops-kpi</span> 深绿，<span class="g-code">.ops-kpi-warn</span> 转红。
+    </p>
+  </section>
+
+  <!-- ================= 严重度 + 异常卡 ================= -->
+  <section class="g-sec">
+    <h2>四 · 严重度 .ops-sev / 异常卡 .ops-anomaly-danger</h2>
+    <div class="g-grid2">
+      <div class="ops-card g-pad">
+        <div style="display:flex;gap:16px;align-items:center;margin-bottom:8px">
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:var(--gd-ink-muted)"><i class="ops-sev ops-sev--danger"></i>严重</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:var(--gd-ink-muted)"><i class="ops-sev ops-sev--warn"></i>警告</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:var(--gd-ink-muted)"><i class="ops-sev ops-sev--info"></i>提示</span>
+        </div>
+        <p class="g-note" style="margin:0">形状 + 颜色<b>双编码</b>：实心圆 / 三角 clip-path / 空心圆。色弱也能分辨，不要只用颜色。</p>
+      </div>
+      <div class="ops-card g-pad">
+        <div style="font-size:10px;color:var(--gd-ink-muted);margin-bottom:8px">动效纪律</div>
+        <p class="g-note" style="margin:0">
+          脉冲只作用于<b>描边与圆点</b>，绝不作用于文字（闪烁文字不可读）。<br>
+          <span class="g-code">@media (prefers-reduced-motion: reduce)</span> 下全站动效自动关闭。
+        </p>
+      </div>
+    </div>
+
+    <div class="g-grid2" style="margin-top:12px">
+      <div class="ops-card ops-anomaly-danger g-anom-card">
+        <div class="g-anom-row1">
+          <span class="ops-sev ops-sev--danger ops-dot-danger"></span>
+          <span class="g-anom-title">出餐严重超时</span>
+          <span class="g-count ops-num" style="color:var(--gd-danger)">3</span>
+          <span style="flex:1"></span>
+          <select class="g-sel"><option>指派</option></select>
+          <span style="color:var(--gd-ink-muted);font-size:10px">→</span>
+        </div>
+        <div class="g-anom-row2">
+          <span class="g-anom-detail g-anom-detail" style="color:var(--gd-ink-muted)">B02 · 已超 42 分钟</span>
+          <button class="g-btn" type="button">明细</button>
+          <button class="g-btn" type="button">知道了</button>
+          <select class="g-sel"><option>关闭</option><option>已处理</option><option>误报</option></select>
+        </div>
+      </div>
+      <div class="ops-card g-anom-card">
+        <div class="g-anom-row1">
+          <span class="ops-sev ops-sev--warn"></span>
+          <span class="g-anom-title">待接单超时</span>
+          <span class="g-count ops-num" style="color:var(--gd-amber)">1</span>
+          <span style="flex:1"></span>
+          <select class="g-sel"><option>指派</option></select>
+          <span style="color:var(--gd-ink-muted);font-size:10px">→</span>
+        </div>
+        <div class="g-anom-row2">
+          <span class="g-anom-detail" style="color:var(--gd-ink-muted)">UR-TAK-9002 · 等待 8 分钟</span>
+          <button class="g-btn" type="button">明细</button>
+          <button class="g-btn" type="button">知道了</button>
+          <select class="g-sel"><option>关闭</option><option>已处理</option><option>误报</option></select>
+        </div>
+      </div>
+    </div>
+    <p class="g-note">
+      异常卡<b>必须两行</b>：① 圆点 + 标题 + 数量 + 指派 + 箭头；② 详情 + 明细 + 知道了 + 关闭。<br>
+      挤成一行时（异常带列宽仅 280/320），「知道了」会被压成 27×51px 竖排三字 —— 2026-11-25 实测踩过。<br>
+      所有操作控件要 <span class="g-code">flex-shrink:0</span> + <span class="g-code">white-space:nowrap</span>；<span class="g-code">::before</span> 是左侧 4px 红条。
+    </p>
+  </section>
+
+  <!-- ================= 热区 ================= -->
+  <section class="g-sec">
+    <h2>五 · 台位热区 .ops-heat-cell</h2>
+    <div class="ops-card g-pad">
+      <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap">
+        <span class="ops-legend"><i style="background:var(--gd-brand-soft);border-color:var(--gd-brand-line)"></i>在席</span>
+        <span class="ops-legend"><i style="background:rgba(212,67,51,0.10);border-color:rgba(212,67,51,0.45)"></i>久坐</span>
+        <span class="ops-legend"><i style="background:var(--gd-amber-soft)"></i>清台</span>
+        <span class="ops-legend"><i style="background:rgba(28,85,152,0.06)"></i>预留</span>
+        <span class="ops-legend"><i style="background:#fff"></i>空闲</span>
+      </div>
+      <div class="g-heat">
+        <div class="ops-heat-cell" style="background:var(--gd-brand-soft);border-color:var(--gd-brand-line)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">A01</span></div>
+        <div class="ops-heat-cell" style="background:var(--gd-brand-soft);border-color:var(--gd-brand-line)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">A02</span></div>
+        <div class="ops-heat-cell" style="background:rgba(212,67,51,0.10);border-color:rgba(212,67,51,0.45)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">A03</span></div>
+        <div class="ops-heat-cell" style="background:var(--gd-amber-soft);border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">A04</span></div>
+        <div class="ops-heat-cell" style="background:rgba(28,85,152,0.06);border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">A05</span></div>
+        <div class="ops-heat-cell" style="background:#fff;border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">A06</span></div>
+        <div class="ops-heat-cell" style="background:#fff;border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">B01</span></div>
+        <div class="ops-heat-cell" style="background:var(--gd-brand-soft);border-color:var(--gd-brand-line)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">B02</span></div>
+        <div class="ops-heat-cell" style="background:rgba(212,67,51,0.10);border-color:rgba(212,67,51,0.45)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">B03</span></div>
+        <div class="ops-heat-cell" style="background:#fff;border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">B04</span></div>
+        <div class="ops-heat-cell" style="background:var(--gd-amber-soft);border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">C01</span></div>
+        <div class="ops-heat-cell" style="background:#fff;border-color:var(--gd-line-soft)"><span class="ops-num" style="font-size:10px;color:var(--gd-ink-body)">C02</span></div>
+      </div>
+    </div>
+    <p class="g-note">五态配色写在行内 style（见 OpsDeckV2 台位网格段），切换有 <span class="g-code">200ms linear</span> 底色过渡。</p>
+  </section>
+
+  <!-- ================= 进度 / 骨架 / 滚动数字 ================= -->
+  <section class="g-sec">
+    <h2>六 · 营业进度 .ops-period-track · 骨架 .ops-skeleton · 滚动数字 .rn-*</h2>
+    <div class="g-grid2">
+      <div class="ops-card g-pad">
+        <div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--gd-ink-muted);margin-bottom:6px">
+          <span>营业中 · 当前时段 10:00 — 22:00</span><span class="ops-num">58%</span>
+        </div>
+        <div class="ops-period-track"><div class="ops-period-fill" style="width:58%"></div></div>
+        <p class="g-note">填充是 <span class="g-code">linear-gradient(90deg, brand-line, brand)</span>，不是纯色。</p>
+      </div>
+      <div class="ops-card g-pad">
+        <div style="font-size:10px;color:var(--gd-ink-muted);margin-bottom:8px">骨架（首帧占位，避免误读为「全部正常」）</div>
+        <div class="ops-skeleton" style="height:12px;width:100%;border-radius:2px;margin-bottom:6px"></div>
+        <div class="ops-skeleton" style="height:12px;width:83%;border-radius:2px;margin-bottom:6px"></div>
+        <div class="ops-skeleton" style="height:12px;width:66%;border-radius:2px"></div>
+      </div>
+    </div>
+
+    <div class="ops-card g-pad" style="margin-top:12px">
+      <div style="font-size:10px;color:var(--gd-ink-muted);margin-bottom:4px">逐位滚动数字（鼠标悬停看动效）</div>
+      <div class="ops-kpi-value ops-num" style="font-size:34px;display:inline-flex" title="结构：每位一列，列内旧值在上、新值在下">
+        <span class="rn-static">¥</span>
+        <span class="rn-col"><span class="rn-stack"><span class="rn-cell">2</span><span class="rn-cell">3</span></span></span>
+        <span class="rn-static">,</span>
+        <span class="rn-col"><span class="rn-stack"><span class="rn-cell">4</span><span class="rn-cell">5</span></span></span>
+        <span class="rn-col"><span class="rn-stack"><span class="rn-cell">0</span><span class="rn-cell">4</span></span></span>
+        <span class="rn-col"><span class="rn-stack"><span class="rn-cell">0</span><span class="rn-cell">0</span></span></span>
+      </div>
+      <p class="g-note">
+        每字符固定 <span class="g-code">1ch</span> 列宽，容器宽度不随位数变化 —— 否则 9,999 → 10,002 时整体位移会抖动。<br>
+        位数变化时不做滚动（新高位没有旧值可比），直接切换。字号 ¥ , . : 空格不做滚动，走 <span class="g-code">.rn-static</span>。
+      </p>
+    </div>
+    <style>.ops-kpi-value:hover .rn-stack { transform: translateY(-1em); }</style>
+  </section>
+
+  <!-- ================= 页脚 ================= -->
+  <section class="g-sec">
+    <h2>七 · 这份皮肤不含什么</h2>
+    <p class="g-note" style="margin-top:0">
+      不含业务逻辑：数据聚合、阈值判定、告警关闭留痕都在 <span class="g-code">opsDeck/useOpsDeckData.ts</span> 与
+      <span class="g-code">useOpsLocalData.ts</span>，本页只画。真实大屏的完整结构与交互见 <span class="g-code">opsDeck/OpsDeckV2.tsx</span>。
+    </p>
+  </section>
+
+</div>
+</body>
+</html>
